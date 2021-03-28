@@ -1,0 +1,9 @@
+{
+	"extends": ["taknepoidet"],
+	"rules": {
+		"quote-props": ["error", "as-needed"],
+		"@typescript-eslint/ban-ts-comment": 0,
+		"no-await-in-loop": 0,
+		"no-continue": 0
+	}
+}
