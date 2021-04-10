@@ -9,13 +9,13 @@ export interface ConfigDatabase {
 }
 
 export interface InsertIntroResponse {
-	fieldCount: number,
-	affectedRows: number,
-	insertId: number,
-	serverStatus: number,
-	warningCount: number,
-	message: string,
-	protocol41: boolean,
+	fieldCount: number;
+	affectedRows: number;
+	insertId: number;
+	serverStatus: number;
+	warningCount: number;
+	message: string;
+	protocol41: boolean;
 	changedRows: number;
 }
 export default class DataBaseConstructor {
@@ -38,7 +38,9 @@ export default class DataBaseConstructor {
 	query<T>(sql: string, args: any | null = null): Promise<T> {
 		return new Promise((resolve, reject) => {
 			this.connection.query(sql, args, (err: MysqlError | null, rows: T) => {
-				if (err) { reject(err); }
+				if (err) {
+					reject(err);
+				}
 				resolve(rows);
 			});
 		});
@@ -47,8 +49,10 @@ export default class DataBaseConstructor {
 	close(): Promise<void> {
 		return new Promise((resolve, reject) => {
 			clearInterval(this.interval);
-			this.connection.end(err => {
-				if (err) { reject(err); }
+			this.connection.end((err) => {
+				if (err) {
+					reject(err);
+				}
 				resolve();
 			});
 		});

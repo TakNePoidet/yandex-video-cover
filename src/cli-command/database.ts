@@ -1,4 +1,3 @@
-
 import { DB_DATABASE, DB_HOST, DB_PASSWORD, DB_PORT, DB_USERNAME } from '../constant';
 import DataBaseConstructor from '../libs/DataBase';
 

@@ -12,14 +12,12 @@ module.exports = merge(commonConfig, {
 	},
 	optimization: {
 		minimize: true,
-		minimizer: [
-			new TerserPlugin()
-		]
+		minimizer: [new TerserPlugin()]
 	},
 	plugins: [
 		new EnvironmentPlugin({
 			'process.env.NODE_ENV': 'development'
 		}),
-		new CleanWebpackPlugin(),
+		new CleanWebpackPlugin()
 	]
 });

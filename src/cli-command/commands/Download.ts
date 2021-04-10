@@ -4,24 +4,21 @@ import path from 'path';
 import fs from 'fs';
 import mkdirp from 'mkdirp';
 import sharp from 'sharp';
-import imagemin from 'imagemin';
-import imageminMozjpeg from 'imagemin-mozjpeg';
 import { getFolderImages, sleep } from '../../libs/util';
 import { database } from '../database';
 
 interface QueueItem {
 	id: number;
-	data: string,
+	data: string;
 	status: number;
 }
 
 interface QueueItemData {
-	videoId: number,
+	videoId: number;
 	images: string;
 }
 export class Download extends Command {
 	public signature = 'download {--loop}';
-
 
 	public description = 'Скачивание картинки с яндекса';
 
@@ -39,38 +36,31 @@ export class Download extends Command {
 
 				await database.query('UPDATE `queue` SET `status` = 2 WHERE `id` = ?', [queue.id]);
 				const data: QueueItemData = JSON.parse(queue.data);
-				const videos = await database.query<Array<{ hash: string; }>>('SELECT `hash` FROM `video` WHERE `id` = ?', [data.videoId]);
+				const videos = await database.query<Array<{ hash: string }>>('SELECT `hash` FROM `video` WHERE `id` = ?', [
+					data.videoId
+				]);
 				const storage = path.resolve(__dirname, '../storage');
 				const response = await axios.get(data.images, { responseType: 'arraybuffer' });
 				const [video] = videos;
 
-
 				const folder = getFolderImages(video.hash, 15);
 
-
-				mkdirp.sync(`${storage}/images${folder}`);
-				const images = await sharp(response.data)
+				const image = await sharp(response.data)
 					.toFormat('jpg', {
 						quality: 100,
 						progressive: false
 					})
 					.toBuffer();
+				const filename = `${storage}/original/${folder}/${video.hash}.jpg`;
 
-				const filename = `${storage}/images${folder}/${video.hash}.jpg`;
+				mkdirp.sync(`${storage}/original/${folder}`);
+				await fs.promises.writeFile(filename, image);
 
-				await fs.promises.writeFile(filename, images);
-				await imagemin([filename], {
-					destination: `${storage}/images${folder}`,
-					plugins: [
-						imageminMozjpeg({
-							progressive: false,
-							quality: 75
-						})
-					]
-				});
-
-
-				await database.query('UPDATE `images` SET `path` = ?, `file` = ?  WHERE `video_id` = ?', [folder, `${video.hash}.png`, data.videoId]);
+				await database.query('UPDATE `images` SET `path` = ?, `file` = ?  WHERE `video_id` = ?', [
+					folder,
+					`${video.hash}.png`,
+					data.videoId
+				]);
 				await database.query('DELETE FROM `queue` WHERE `id` = ?', [queue.id]);
 
 				database.commit();
@@ -80,4 +70,4 @@ export class Download extends Command {
 			}
 		} while (this.options.loop);
 	}
-};
+}

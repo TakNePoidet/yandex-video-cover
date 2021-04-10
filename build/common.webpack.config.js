@@ -3,7 +3,7 @@ const fs = require('fs');
 const WebpackBar = require('webpackbar');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
-const nodeExternals = require('webpack-node-externals')
+const nodeExternals = require('webpack-node-externals');
 const {
 	ids: { HashedModuleIdsPlugin }
 } = require('webpack');
@@ -11,7 +11,7 @@ const notifier = require('node-notifier');
 exports.commonConfig = {
 	entry: {
 		server: './src/app-server/index.ts',
-		cli: './src/cli-command/index.ts',
+		cli: './src/cli-command/index.ts'
 	},
 	output: {
 		publicPath: '/',
@@ -40,7 +40,7 @@ exports.commonConfig = {
 						}
 					}
 				]
-			},
+			}
 		]
 	},
 	plugins: [
@@ -65,15 +65,15 @@ exports.commonConfig = {
 			additionalFormatters: [],
 			additionalTransformers: []
 		}),
-		new WebpackBar(),
+		new WebpackBar()
 	],
 	resolve: {
-		extensions: ['.js', '.ts', '.jsx', '.tsx'],
+		extensions: ['.js', '.ts', '.jsx', '.tsx']
 	},
 	target: 'node',
 	node: {
-     __dirname: false,
-    __filename: false,  
-  },
-  externals: [nodeExternals()], 
+		__dirname: false,
+		__filename: false
+	},
+	externals: [nodeExternals()]
 };
