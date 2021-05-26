@@ -1,13 +1,7 @@
 const path = require('path');
-const fs = require('fs');
 const WebpackBar = require('webpackbar');
 const ESLintPlugin = require('eslint-webpack-plugin');
-const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
-const {
-	ids: { HashedModuleIdsPlugin }
-} = require('webpack');
-const notifier = require('node-notifier');
 exports.commonConfig = {
 	entry: {
 		server: './src/app-server/index.ts',
@@ -47,23 +41,6 @@ exports.commonConfig = {
 		new ESLintPlugin({
 			context: '../src',
 			extensions: ['.js', '.ts', '.vue']
-		}),
-		new FriendlyErrorsWebpackPlugin({
-			onErrors(severity, errors) {
-				if (severity !== 'error') {
-					return;
-				}
-				const error = errors[0];
-
-				notifier.notify({
-					title: 'Webpack error',
-					message: `${severity}: ${error.name}`,
-					subtitle: error.file || ''
-				});
-			},
-			clearConsole: false,
-			additionalFormatters: [],
-			additionalTransformers: []
 		}),
 		new WebpackBar()
 	],

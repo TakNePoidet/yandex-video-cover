@@ -1,4 +1,4 @@
-const { merge } = require('webpack-merge');
+const merge  = require('webpack-merge');
 const path = require('path');
 const { EnvironmentPlugin } = require('webpack');
 const { commonConfig } = require('./common.webpack.config');
